@@ -5,7 +5,7 @@ from random import randint
 from sklearn.linear_model import LogisticRegression
 
 # Create a graph
-G = nx.read_edgelist('edgelist.txt', delimiter=',', create_using=nx.Graph(), nodetype=int)
+G = nx.read_edgelist('data/initial_data/edgelist.txt', delimiter=',', create_using=nx.Graph(), nodetype=int)
 nodes = list(G.nodes())
 n = G.number_of_nodes()
 m = G.number_of_edges()
@@ -36,7 +36,7 @@ print('Size of training matrix:', X_train.shape)
 
 # Read test data. Each sample is a pair of nodes
 node_pairs = list()
-with open('test.txt', 'r') as f:
+with open('data/initial_data/test.txt', 'r') as f:
     for line in f:
         t = line.split(',')
         node_pairs.append((int(t[0]), int(t[1])))

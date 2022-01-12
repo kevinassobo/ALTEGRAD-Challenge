@@ -1,1 +1,1 @@
-data/abstracts.txt filter=lfs diff=lfs merge=lfs -text
+data/initial_data/abstracts.txt filter=lfs diff=lfs merge=lfs -text
