@@ -1,1 +1,2 @@
 data/initial_data/abstracts.txt filter=lfs diff=lfs merge=lfs -text
+data/models/doc2vec_dm_64.model filter=lfs diff=lfs merge=lfs -text
