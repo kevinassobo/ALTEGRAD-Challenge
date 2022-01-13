@@ -4,6 +4,8 @@ import numpy as np
 from random import randint
 from sklearn.linear_model import LogisticRegression
 
+from gensim.models.doc2vec import Doc2Vec
+
 # Create a graph
 G = nx.read_edgelist('data/initial_data/edgelist.txt', delimiter=',', create_using=nx.Graph(), nodetype=int)
 nodes = list(G.nodes())
@@ -19,6 +21,9 @@ with open('data/initial_data/abstracts.txt', 'r') as f:
         node, abstract = line.split('|--|')
         abstracts[int(node)] = abstract
 
+# Read the Doc2vec model
+doc2vec_model = Doc2Vec.load('data/models/doc2vec_dm_64.model')
+
 # Map text to set of terms
 for node in abstracts:
     abstracts[node] = set(abstracts[node].split())
@@ -32,7 +37,7 @@ for node in abstracts:
 # (2) absolute value of difference of number of unique terms of the two nodes' abstracts
 # (3) number of common terms between the abstracts of the two nodes
 
-X_train = np.zeros((2*m, 5))
+X_train = np.zeros((2*m, 6))
 y_train = np.zeros(2*m)
 for i,edge in enumerate(G.edges()):
     # an edge
@@ -41,6 +46,7 @@ for i,edge in enumerate(G.edges()):
     X_train[2*i,2] = len(abstracts[edge[0]]) + len(abstracts[edge[1]])
     X_train[2*i,3] = abs(len(abstracts[edge[0]]) - len(abstracts[edge[1]]))
     X_train[2*i,4] = len(abstracts[edge[0]].intersection(abstracts[edge[1]]))
+    X_train[2*i,5] = doc2vec_model.docvecs.similarity(edge[0], edge[1])
     y_train[2*i] = 1
 
     # a randomly generated pair of nodes
@@ -51,6 +57,7 @@ for i,edge in enumerate(G.edges()):
     X_train[2*i+1,2] = len(abstracts[n1]) + len(abstracts[n2])
     X_train[2*i+1,3] = abs(len(abstracts[n1]) - len(abstracts[n2]))
     X_train[2*i+1,4] = len(abstracts[n1].intersection(abstracts[n2]))
+    X_train[2*i+1,5] = doc2vec_model.docvecs.similarity(n1, n2)
     y_train[2*i+1] = 0
 
 print('Size of training matrix:', X_train.shape)
@@ -63,13 +70,14 @@ with open('data/initial_data/test.txt', 'r') as f:
         node_pairs.append((int(t[0]), int(t[1])))
 
 # Create the test matrix. Use the same 2 features as above
-X_test = np.zeros((len(node_pairs), 5))
+X_test = np.zeros((len(node_pairs), 6))
 for i,node_pair in enumerate(node_pairs):
     X_test[i,0] = G.degree(node_pair[0]) + G.degree(node_pair[1])
     X_test[i,1] = abs(G.degree(node_pair[0]) - G.degree(node_pair[1]))
     X_test[i,2] = len(abstracts[node_pair[0]]) + len(abstracts[node_pair[1]])
     X_test[i,3] = abs(len(abstracts[node_pair[0]]) - len(abstracts[node_pair[1]]))
     X_test[i,4] = len(abstracts[node_pair[0]].intersection(abstracts[node_pair[1]]))
+    X_test[i,5] = doc2vec_model.docvecs.similarity(node_pair[0], node_pair[1])
 
 print('Size of test matrix:', X_test.shape)
 
