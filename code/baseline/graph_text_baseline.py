@@ -38,7 +38,7 @@ for node in abstracts:
 
 # Read test data. Each sample is a pair of nodes
 node_pairs = list()
-with open('data/initial_data/test.txt', 'r') as f:
+with open('data/processed_data/non_edges.txt', 'r') as f:
     for line in f:
         t = line.split(',')
         node_pairs.append((int(t[0]), int(t[1])))
@@ -66,8 +66,8 @@ for i,edge in enumerate(G.edges()):
     y_train[2*i] = 1
 
     # a randomly generated pair of nodes
-    n1 = nodes[randint(0, n-1)]
-    n2 = nodes[randint(0, n-1)]
+    n1 = node_pairs[i][0]
+    n2 = node_pairs[i][1]
     X_train[2*i+1,0] = G.degree(n1) + G.degree(n2)
     X_train[2*i+1,1] = abs(G.degree(n1) - G.degree(n2))
     X_train[2*i+1,2] = len(abstracts[n1]) + len(abstracts[n2])
@@ -79,7 +79,12 @@ for i,edge in enumerate(G.edges()):
 
 print('Size of training matrix:', X_train.shape)
 
-
+# Read test data. Each sample is a pair of nodes
+node_pairs = list()
+with open('data/initial_data/test.txt', 'r') as f:
+    for line in f:
+        t = line.split(',')
+        node_pairs.append((int(t[0]), int(t[1])))
 
 # Create the test matrix. Use the same 2 features as above
 X_test = np.zeros((len(node_pairs), 7))
