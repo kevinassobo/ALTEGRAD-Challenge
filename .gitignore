@@ -1,2 +1,5 @@
 *.DS_Store
 *submission.csv
+data/datasets
+data/authors_processed
+data/models

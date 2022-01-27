@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
 from gensim.models.doc2vec import Doc2Vec
+from gensim.models import KeyedVectors
 
 # Create a graph
 G = nx.read_edgelist('data/initial_data/edgelist.txt', delimiter=',', create_using=nx.Graph(), nodetype=int)
@@ -24,7 +25,7 @@ with open('data/initial_data/abstracts.txt', 'r') as f:
 
 # Read the authors to each paper
 authors = dict()
-with open('data/processed_data/authors_ids.txt', 'r') as f:
+with open('data/authors_processed/authors_ids.txt', 'r') as f:
     for line in f:
         node, node_authors = line.rstrip('\n').split('|--|')
         authors[int(node)] = node_authors.split(',')
@@ -32,16 +33,13 @@ with open('data/processed_data/authors_ids.txt', 'r') as f:
 # Read the Doc2vec model
 doc2vec_model = Doc2Vec.load('data/models/doc2vec_dm_64.model')
 
+# Read nodes embeddings
+node2vec = KeyedVectors.load_word2vec_format('data/models/node2vec_full_graph.nodevectors')
+
 # Map text to set of terms
 for node in abstracts:
     abstracts[node] = set(abstracts[node].split())
 
-# Read test data. Each sample is a pair of nodes
-node_pairs = list()
-with open('data/processed_data/non_edges.txt', 'r') as f:
-    for line in f:
-        t = line.split(',')
-        node_pairs.append((int(t[0]), int(t[1])))
 
 # Create the training matrix. Each row corresponds to a pair of nodes and
 # its class label is 1 if it corresponds to an edge and 0, otherwise.
@@ -66,8 +64,8 @@ for i,edge in enumerate(G.edges()):
     y_train[2*i] = 1
 
     # a randomly generated pair of nodes
-    n1 = node_pairs[i][0]
-    n2 = node_pairs[i][1]
+    n1 = nodes[randint(0, n-1)]
+    n2 = nodes[randint(0, n-1)]
     X_train[2*i+1,0] = G.degree(n1) + G.degree(n2)
     X_train[2*i+1,1] = abs(G.degree(n1) - G.degree(n2))
     X_train[2*i+1,2] = len(abstracts[n1]) + len(abstracts[n2])
@@ -75,6 +73,7 @@ for i,edge in enumerate(G.edges()):
     X_train[2*i+1,4] = len(abstracts[n1].intersection(abstracts[n2]))
     X_train[2*i+1,5] = doc2vec_model.docvecs.similarity(n1, n2)
     X_train[2*i+1,6] = len(set(authors[n1]) & set(authors[n2]))
+
     y_train[2*i+1] = 0
 
 print('Size of training matrix:', X_train.shape)
@@ -97,6 +96,7 @@ for i,node_pair in enumerate(node_pairs):
     X_test[i,5] = doc2vec_model.docvecs.similarity(node_pair[0], node_pair[1])
     X_test[i,6] = len(set(authors[node_pair[0]]) & set(authors[node_pair[1]]))
 
+
 print('Size of test matrix:', X_test.shape)
 
 # Use logistic regression to predict if two nodes are linked by an edge
@@ -104,7 +104,7 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-clf = LogisticRegression()
+clf = LogisticRegression(max_iter=2000)
 clf.fit(X_train, y_train)
 y_pred = clf.predict_proba(X_test)
 y_pred = y_pred[:,1]
