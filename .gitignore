@@ -3,3 +3,4 @@
 data/datasets
 data/authors_processed
 data/models
+*__pycache__
