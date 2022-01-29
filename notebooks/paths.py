@@ -46,8 +46,17 @@ DOC2VEC_PATH = os.path.join(MODELS_DIR, "doc2vec_dm_64.model")
 # -----------------
 CHALLENGE_FEATS_PATH = os.path.join(DATASETS_DIR, 'challenge_feats.csv')
 
+# Intermediate storage (for non final datasets)
+STORAGE_DIR = os.path.join(DATASETS_DIR, 'storage')
+os.makedirs(STORAGE_DIR, exist_ok=True)
+
+STORAGE_STAGE1_PATH = os.path.join(STORAGE_DIR, 'stage_1.h5')
+STORAGE_STAGE2_PATH = os.path.join(STORAGE_DIR, 'stage_2.h5')
+
 # Train data directory
 TRAIN_DIR = os.path.join(DATASETS_DIR, 'train_data')
+os.makedirs(TRAIN_DIR, exist_ok=True)
+
 TRAIN_EDGELIST_PATH  = os.path.join(TRAIN_DIR, 'train_graph_edgelist.txt')
 TRAIN_PAIRS_PATH  = os.path.join(TRAIN_DIR, 'train_pairs.csv')
 TRAIN_TARGET_PATH  = os.path.join(TRAIN_DIR, 'train_target.csv')
@@ -55,6 +64,8 @@ TRAIN_FEATS_PATH = os.path.join(TRAIN_DIR, 'train_feats.csv')
 
 # Test data directory
 TEST_DIR = os.path.join(DATASETS_DIR, 'test_data')
+os.makedirs(TEST_DIR, exist_ok=True)
+
 TEST_EDGELIST_PATH  = os.path.join(TEST_DIR, 'test_graph_edgelist.txt')
 TEST_PAIRS_PATH  = os.path.join(TEST_DIR, 'test_pairs.csv')
 TEST_TARGET_PATH  = os.path.join(TEST_DIR, 'test_target.csv')
