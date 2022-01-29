@@ -6,12 +6,14 @@ DATA_DIR = "../data"
   
 INITIAL_DATA_DIR = os.path.join(DATA_DIR, 'initial_data')
 AUTHORS_PROCESSED_DIR = os.path.join(DATA_DIR, 'authors_processed')
+AUTHORS_CITATIONS_DIR = os.path.join(DATA_DIR, 'authors_citations')
 GRAPHS_FEATS_DIR = os.path.join(DATA_DIR, 'graphs_features')
 MODELS_DIR = os.path.join(DATA_DIR, "models")
 DATASETS_DIR = os.path.join(DATA_DIR, "datasets")
 
 os.makedirs(INITIAL_DATA_DIR, exist_ok=True)
 os.makedirs(AUTHORS_PROCESSED_DIR, exist_ok=True)
+os.makedirs(AUTHORS_CITATIONS_DIR, exist_ok=True)
 os.makedirs(GRAPHS_FEATS_DIR, exist_ok=True)
 os.makedirs(MODELS_DIR, exist_ok=True)
 os.makedirs(DATASETS_DIR, exist_ok=True)
@@ -25,14 +27,19 @@ CHALLENGE_PAIRS_PATH = os.path.join(INITIAL_DATA_DIR, 'test.txt')
 
 # Authors processed directory
 # ---------------------------
-AUTHORS_EDGELIST_PATH = os.path.join(AUTHORS_PROCESSED_DIR, 'author_collab_edgelist.txt')
+AUTHCOLL_EDGELIST_PATH = os.path.join(AUTHORS_PROCESSED_DIR, 'author_collab_edgelist.txt')
 PAPER_2_AUTHORS_ID_PATH = os.path.join(AUTHORS_PROCESSED_DIR, 'paper_2_authors_id.txt')
 AUTHOR_ID_2_PAPERS_PATH = os.path.join(AUTHORS_PROCESSED_DIR, 'author_id_2_papers.txt')
 ID_2_AUTHOR_PATH = os.path.join(AUTHORS_PROCESSED_DIR, 'id2author.txt')
 
-# Similarity graphs directory
+# Authors citations directory
 # ---------------------------
-PAPER_COMAUTH_EDGELIST_PATH = os.path.join(GRAPHS_FEATS_DIR, 'paper_comauth_edgelist.txt')
+FULL_AUTHCIT_EDGELIST_PATH = os.path.join(AUTHORS_CITATIONS_DIR, 'authcit_edgelist.txt')
+TRAIN_AUTHCIT_EDGELIST_PATH = os.path.join(AUTHORS_CITATIONS_DIR, 'train_authcit_edgelist.txt')
+TEST_AUTHCIT_EDGELIST_PATH = os.path.join(AUTHORS_CITATIONS_DIR, 'test_authcit_edgelist.txt')
+
+# graphs features directory
+# ---------------------------
 
 # Model directory
 # ---------------
