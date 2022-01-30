@@ -1,8 +1,18 @@
 import os 
+import sys
+
+
 
 # Paths where we will save the datasets
 # -------------------------------------
 DATA_DIR = "../data"
+
+import sys
+if 'google.colab' in sys.modules:
+    DATA_DIR = "/content/drive/MyDrive/Colab Notebooks/ALTeGraD/Projet/data"
+
+    from google.colab import drive
+    drive.mount('/content/drive')
   
 INITIAL_DATA_DIR = os.path.join(DATA_DIR, 'initial_data')
 AUTHORS_PROCESSED_DIR = os.path.join(DATA_DIR, 'authors_processed')
@@ -40,6 +50,9 @@ TEST_AUTHCIT_EDGELIST_PATH = os.path.join(AUTHORS_CITATIONS_DIR, 'test_authcit_e
 
 # graphs features directory
 # ---------------------------
+FULL_GRAPH_BET_CENT_PATH = os.path.join(GRAPHS_FEATS_DIR, 'full_graph_bet_cen.pkl')
+TRAIN_GRAPH_BET_CENT_PATH = os.path.join(GRAPHS_FEATS_DIR, 'train_graph_bet_cen.pkl')
+TEST_GRAPH_BET_CENT_PATH = os.path.join(GRAPHS_FEATS_DIR, 'test_graph_bet_cen.pkl')
 
 # Model directory
 # ---------------
